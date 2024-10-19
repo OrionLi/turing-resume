@@ -1,7 +1,8 @@
 package config
 
 import (
-	"gorm.io/driver/sqlite"
+	"fmt"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
@@ -13,8 +14,17 @@ import (
 var DB *gorm.DB
 
 func InitDB() {
+	// 获取数据库连接信息
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		"root",          // DB_USER
+		"turingwlb666",  // DB_PASSWORD
+		"badtzh.xyz",    // DB_HOST
+		"33306",         // DB_PORT
+		"turing_resume", // DB_NAME
+	)
+
 	// 连接数据库
-	db, err := gorm.Open(sqlite.Open("turing-resume.db"), &gorm.Config{
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true, // 使用单数表名
 		},
